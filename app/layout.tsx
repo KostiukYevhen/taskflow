@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
+import { AuthSessionProvider } from "@/components/providers/session-provider";
+import { auth } from "@/lib/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -10,18 +13,23 @@ export const metadata: Metadata = {
   description: "Modern task management system for teams",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const session = await auth();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <AuthSessionProvider session={session}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </AuthSessionProvider>
+        <Toaster />
       </body>
     </html>
   );

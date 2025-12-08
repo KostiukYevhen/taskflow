@@ -1,9 +1,9 @@
 "use client";
 
 import * as ProgressPrimitive from "@radix-ui/react-progress";
+import { cva } from "class-variance-authority";
 
 import { cn } from "@/lib/utils";
-import { cva } from "class-variance-authority";
 
 interface ProgressProps extends React.ComponentProps<typeof ProgressPrimitive.Root> {
   variant?: "default" | "high" | "complete";

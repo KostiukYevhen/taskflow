@@ -1,7 +1,7 @@
 import { Sidebar } from "@/components/features/sidebar";
 import { Header } from "@/components/features/header";
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen">
       <Sidebar />

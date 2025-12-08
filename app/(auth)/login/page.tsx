@@ -15,6 +15,9 @@ import {
 } from "@/components/ui/form";
 import { LoginFormData, loginSchema } from "@/lib/validations/auth";
 import { Link } from "@/components/ui/link";
+import { login } from "@/lib/actions/auth";
+import { Spinner } from "@/components/ui/spinner";
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const form = useForm<LoginFormData>({
@@ -22,8 +25,16 @@ export default function LoginPage() {
     defaultValues: { email: "", password: "" },
   });
 
-  const onSubmit = (data: LoginFormData) => {
-    console.log("submit", data);
+  const onSubmit = async (data: LoginFormData) => {
+    const formData = new FormData();
+    formData.append("email", data.email);
+    formData.append("password", data.password);
+
+    const result = await login(formData);
+
+    if (result?.error) {
+      toast.error(result.error);
+    }
   };
 
   return (
@@ -66,8 +77,8 @@ export default function LoginPage() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
-              Sign in
+            <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+              {form.formState.isSubmitting && <Spinner />} Sign in
             </Button>
           </form>
         </Form>
